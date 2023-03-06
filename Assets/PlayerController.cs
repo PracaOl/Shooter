@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 movementVector = Vector2.zero;
         bulletSpawn = transform.Find("BulletSpawn");
+        //e
     }
 
     // Update is called once per frame

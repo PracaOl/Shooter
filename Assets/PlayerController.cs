@@ -6,12 +6,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject bulletPreFab;
     Vector2 movementVector;
+    Transform bulletSpawn;
 
     // Start is called before the first frame update
     void Start()
     {
         Vector2 movementVector = Vector2.zero;
+        bulletSpawn = transform.Find("BulletSpawn");
     }
 
     // Update is called once per frame
@@ -25,6 +28,14 @@ public class PlayerController : MonoBehaviour
     {
         movementVector = inputValue.Get<Vector2>();
 
-        Debug.Log(movementVector.ToString());
+        //Debug.Log(movementVector.ToString());
+    }
+
+    void OnFire()
+    {
+        GameObject bullet = Instantiate(bulletPreFab, bulletSpawn);
+        bullet.transform.parent = null;
+        bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward*10, ForceMode.VelocityChange);
+        Destroy(bullet, 5);
     }
 }

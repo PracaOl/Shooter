@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject bulletPreFab;
+    float hp = 10;
+    public GameObject bulletPrefab;
     public float bulletSpeed = 20;
     public float playerSpeed = 2;
     Vector2 movementVector;
     Transform bulletSpawn;
+    public GameObject hpBar;
+    Scrollbar hpScrollBar;
 
     // Start is called before the first frame update
     void Start()
     {
-        Vector2 movementVector = Vector2.zero;
+        movementVector = Vector2.zero;
         bulletSpawn = transform.Find("BulletSpawn");
+        hpScrollBar = hpBar.GetComponent<Scrollbar>();
         //e
     }
 
@@ -36,9 +41,36 @@ public class PlayerController : MonoBehaviour
 
     void OnFire()
     {
-        GameObject bullet = Instantiate(bulletPreFab, bulletSpawn);
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawn);
         bullet.transform.parent = null;
         bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward*bulletSpeed, ForceMode.VelocityChange);
         Destroy(bullet, 5);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Enemy"))
+        {
+   
+            hp--;
+            if(hp <= 0) Die();
+            hpScrollBar.size = hp / 10;
+            Vector3 pushVector = collision.gameObject.transform.position - transform.position;
+            collision.gameObject.GetComponent<Rigidbody>().AddForce(pushVector.normalized*5, ForceMode.Impulse);
+        }
+        if(collision.gameObject.CompareTag("Heal"))
+        {
+            hp = 10;
+            hpScrollBar.size = hp / 10;
+            Destroy(collision.gameObject);
+        }
+    }
+    void Die()
+    {
+        GetComponent<BoxCollider>().enabled = false;
+        transform.Translate(Vector3.up);
+        transform.Rotate(Vector3.right * -90);
+        
+        //Time.timeScale = 0;
     }
 }

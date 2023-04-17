@@ -5,10 +5,13 @@ using UnityEngine.AI;
 
 public class ZombieBehaviour : MonoBehaviour
 {
+    public float sightRange = 15f;
     int hp = 10;
 
     GameObject player;
     NavMeshAgent agent;
+
+    private bool playerVisible = false;
     
     // Start is called before the first frame update
     void Start()
@@ -20,6 +23,23 @@ public class ZombieBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 raySource = transform.position + Vector3.up * 1.8f;
+        Vector3 rayDirection = player.transform.position - transform.position;
+        //Debug.DrawLine(raySource, rayDest);
+
+        RaycastHit hit;
+        if (Physics.Raycast(raySource, rayDirection, out hit, 15f))
+        {
+
+            Debug.Log(hit.transform.gameObject.ToString());
+            if (hit.transform.CompareTag("Player"))
+                //Debug.Log("I see you.");
+                playerVisible= true;
+            else
+                playerVisible= false;
+        }
+
+        agent.isStopped = !playerVisible;
         if(hp> 0)
         {
             //transform.LookAt(player.transform.position);
@@ -29,10 +49,7 @@ public class ZombieBehaviour : MonoBehaviour
 
             agent.destination = player.transform.position;
         }
-        else
-        {
-            agent.speed = 0;
-        }
+        
 
     }
     private void OnCollisionEnter(Collision collision)

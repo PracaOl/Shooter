@@ -6,12 +6,14 @@ using UnityEngine.AI;
 public class ZombieBehaviour : MonoBehaviour
 {
     public float sightRange = 15f;
+    public float hearRange = 5f;
     int hp = 10;
 
     GameObject player;
     NavMeshAgent agent;
 
     private bool playerVisible = false;
+    private bool playerHearable = false;
     
     // Start is called before the first frame update
     void Start()
@@ -39,7 +41,17 @@ public class ZombieBehaviour : MonoBehaviour
                 playerVisible= false;
         }
 
-        agent.isStopped = !playerVisible;
+        Collider[] heardObjects = Physics.OverlapSphere(transform.position, hearRange);
+        playerHearable = false;
+        foreach (Collider collider in heardObjects)
+        {
+            if (collider.gameObject.CompareTag("Player"))
+            {
+                playerHearable= true;
+            }
+        }
+
+        agent.isStopped = !playerVisible && !playerHearable;
         if(hp> 0)
         {
             //transform.LookAt(player.transform.position);

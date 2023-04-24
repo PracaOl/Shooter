@@ -3,7 +3,9 @@ guid: 21f85588491f63346b1ef2624f208427
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - zombiePefab: {instanceID: 0}
+  - healPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -3,7 +3,9 @@ guid: 445ad9b53dd2fe6418cb6d4620f926a0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - bulletPrefab: {instanceID: 0}
+  - hpBar: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
